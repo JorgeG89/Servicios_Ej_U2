@@ -4,7 +4,7 @@ public class Practica_1_1 {
     public static void main(String[] args) {
 
         Tarea1_1 t1 = new Tarea1_1(0);
-        Tarea2_1 t2 = new Tarea2_1(1);
+        Tarea1_1 t2 = new Tarea1_1(1);
         t1.start();
         t2.start();
     }
@@ -13,19 +13,6 @@ public class Practica_1_1 {
 class Tarea1_1 extends Thread {
     int idHebra;
     public Tarea1_1(int idHebra) {
-        this.idHebra = idHebra;
-    }
-
-    public void run() {
-        int numHebras = 1000;
-        for (int nHebra = 0; nHebra < numHebras; nHebra++) {
-            System.out.println("Hola, soy la hebra "+ idHebra);
-        }
-    }
-}
-class Tarea2_1 extends Thread {
-    int idHebra;
-    public Tarea2_1(int idHebra) {
         this.idHebra = idHebra;
     }
 

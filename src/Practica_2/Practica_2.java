@@ -32,7 +32,7 @@ public class Practica_2 {
             }
         }
 
-        System.out.println ("Soy el programa principal y contador vale:" + cuenta.dameContador());
+        System.out.println ("Soy el programa principal y contador vale: " + cuenta.dameContador());
     }
 }
 
@@ -40,7 +40,7 @@ class CuentaIncrementos{
     long contador = 0;
 
     void incrementaContador(){
-
+        contador++;
     }
 
     long dameContador(){
@@ -57,7 +57,11 @@ class miHebra extends Thread{
     }
 
     public void run(){
+        System.out.println("Inicio de la hebra: "+idHebra);
+        for (int repetir = 0; repetir < 1000000; repetir++){
+            cuenta.incrementaContador();
+        }
 
-        System.out.println("Hola soy la hebra: "+idHebra);
+        System.out.println("La hebra "+idHebra+" ha terminado");
     }
 }
