@@ -16,6 +16,7 @@ class Tarea1_1 extends Thread {
         this.idHebra = idHebra;
     }
 
+    //Trataban de entrar los 2 a la vez y no salian los calculos
     public void run() {
         int numHebras = 1000;
         for (int nHebra = 0; nHebra < numHebras; nHebra++) {
