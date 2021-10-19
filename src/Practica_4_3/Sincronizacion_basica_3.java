@@ -115,18 +115,18 @@ public class Sincronizacion_basica_3 {
         System.out.println("");
         System.out.println("Implementación por bloques.");
 
-        MiHebraBloques v[] = new MiHebraBloques[numHebras];
+        MiHebraBloques listaHebras[] = new MiHebraBloques[numHebras];
 
         t1 = System.nanoTime();
 
-        for (int i = 0; i < numHebras; i++) {
-            v[i] = new MiHebraBloques(i, numHebras, vectorNumeros);
-            v[i].start();
+        for (int idHebra = 0; idHebra < numHebras; idHebra++) {
+            listaHebras[idHebra] = new MiHebraBloques(idHebra, numHebras, vectorNumeros);
+            listaHebras[idHebra].start();
         }
 
         for (int i = 0; i < numHebras; i++) {
             try {
-                v[i].join();
+                listaHebras[i].join();
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
