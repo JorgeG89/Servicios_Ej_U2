@@ -1,6 +1,6 @@
 package Practica_4_1;
 
-public class CalculoPrimosVector_a {
+public class Sincronizacion_basica_1 {
     public static void main(String args[]) {
         int numHebras;
         long vectorNumeros[] = {
@@ -18,7 +18,7 @@ public class CalculoPrimosVector_a {
 
         numHebras = 4;
 
-        //implementacionSecuencial(vectorNumeros);
+        implementacionSecuencial(vectorNumeros);
 
         //implementacionCiclica(vectorNumeros, numHebras);
 
@@ -37,16 +37,20 @@ public class CalculoPrimosVector_a {
 
         t1 = System.nanoTime();
         //Escribe aquí la implementación secuencial
-
+        System.out.println("Numeros primos: ");
+        for (int contador = 0; contador<vectorNumeros.length; contador++ ){
+            if(esPrimo(vectorNumeros[contador])){
+                System.out.printf(vectorNumeros[contador]+" ");
+            }
+        }
 
         //Fin de la implementación secuencial
         t2 = System.nanoTime();
         tt = ((double) (t2 - t1)) / 1.0e9;
-
-        System.out.println("Tiempo secuencial (seg.):\t\t\t" + tt);
+        System.out.println("\nTiempo secuencial (seg.):\t\t\t" + tt);
     }
 
-    static void implementacionCiclica(long[] vectorNumeros, int numHebras) {
+    /*static void implementacionCiclica(long[] vectorNumeros, int numHebras) {
         long t1;
         long t2;
         double tt;
@@ -75,12 +79,12 @@ public class CalculoPrimosVector_a {
         tt = ((double) (t2 - t1)) / 1.0e9;
 
         System.out.println("Tiempo cíclico (seg.):\t\t\t" + tt);
-    }
+    }*/
 
 
 //------------------------------------------------------------------------------------------------------------
 
-    static void implementacionBloques(long[] vectorNumeros, int numHebras) {
+    /*static void implementacionBloques(long[] vectorNumeros, int numHebras) {
 
         long t1;
         long t2;
@@ -110,7 +114,7 @@ public class CalculoPrimosVector_a {
         tt = ((double) (t2 - t1)) / 1.0e9;
 
         System.out.println("Tiempo Bloques (seg.):\t\t\t" + tt);
-    }
+    }*/
 
     static boolean esPrimo( long num ) {
         boolean primo;
