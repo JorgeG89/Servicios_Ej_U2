@@ -1,9 +1,12 @@
 package Practica_4_3;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import static java.lang.Math.min;
 
 public class Sincronizacion_basica_3 {
     public static void main(String args[]) {
+        //Ejercicio modificado para que tambien cuente los incrementos al recibir un numero primo
         int numHebras;
         long vectorNumeros[] = {
                 200000033L, 200000039L, 200000051L, 200000069L,
@@ -33,6 +36,7 @@ public class Sincronizacion_basica_3 {
         long t1;
         long t2;
         double tt;
+        cuentaIncrementos e = new cuentaIncrementos();
 
         System.out.println("");
         System.out.println("Implementación secuencial.");
@@ -43,6 +47,7 @@ public class Sincronizacion_basica_3 {
         for (int contador = 0; contador<vectorNumeros.length; contador++ ){
             if(esPrimo(vectorNumeros[contador])){
                 System.out.printf(vectorNumeros[contador]+" ");
+                e.aumentarContador();
             }
         }
 
@@ -50,12 +55,14 @@ public class Sincronizacion_basica_3 {
         t2 = System.nanoTime();
         tt = ((double) (t2 - t1)) / 1.0e9;
         System.out.println("\nTiempo secuencial (seg.):\t\t\t" + tt);
+        System.out.println("Incrementos: "+e.devolverContador());
     }
 
     static void implementacionCiclica(long[] vectorNumeros, int numHebras) {
         long t1;
         long t2;
         double tt;
+        cuentaIncrementos e = new cuentaIncrementos();
 
         System.out.println("");
         System.out.println("Implementación cíclica.");
@@ -65,7 +72,7 @@ public class Sincronizacion_basica_3 {
         t1 = System.nanoTime();
 
         for (int idHebra = 0; idHebra < numHebras; idHebra++) {
-            listaHebras[idHebra] = new MiHebraCiclica(idHebra, numHebras, vectorNumeros);
+            listaHebras[idHebra] = new MiHebraCiclica(idHebra, numHebras, vectorNumeros, e);
             listaHebras[idHebra].start();
         }
 
@@ -81,6 +88,7 @@ public class Sincronizacion_basica_3 {
         tt = ((double) (t2 - t1)) / 1.0e9;
 
         System.out.println("\nTiempo cíclico (seg.):\t\t\t" + tt);
+        System.out.println("Incrementos: "+e.devolverContador());
     }
 
 
@@ -93,16 +101,18 @@ public class Sincronizacion_basica_3 {
         long t1;
         long t2;
         double tt;
+        cuentaIncrementos e = new cuentaIncrementos();
 
         System.out.println("");
         System.out.println("Implementación por bloques.");
+
 
         MiHebraBloques listaHebras[] = new MiHebraBloques[numHebras];
 
         t1 = System.nanoTime();
 
         for (int idHebra = 0; idHebra < numHebras; idHebra++) {
-            listaHebras[idHebra] = new MiHebraBloques(idHebra, numHebras, vectorNumeros);
+            listaHebras[idHebra] = new MiHebraBloques(idHebra, numHebras, vectorNumeros, e);
             listaHebras[idHebra].start();
         }
 
@@ -118,6 +128,7 @@ public class Sincronizacion_basica_3 {
         tt = ((double) (t2 - t1)) / 1.0e9;
 
         System.out.println("\nTiempo Bloques (seg.):\t\t\t" + tt);
+        System.out.println("Incrementos: "+e.devolverContador());
     }
 
     static boolean esPrimo( long num ) {
@@ -139,16 +150,19 @@ class MiHebraCiclica extends Thread {
     int idHebra;
     int numHebras;
     long[] vectorNumeros;
+    cuentaIncrementos e;
 
-    public MiHebraCiclica(int idHebra, int numHebras, long[] vectorNumeros) {
+    public MiHebraCiclica(int idHebra, int numHebras, long[] vectorNumeros, cuentaIncrementos e) {
         this.idHebra = idHebra;
         this.numHebras = numHebras;
         this.vectorNumeros = vectorNumeros;
+        this.e = e;
     }
     public void run() {
         for (int i = idHebra; i < vectorNumeros.length; i+=numHebras) {
             if(Sincronizacion_basica_3.esPrimo(vectorNumeros[i])){
                 System.out.print(vectorNumeros[i]+" ");
+                e.aumentarContador();
             }
             //System.out.println();
         }
@@ -159,11 +173,14 @@ class MiHebraBloques extends Thread {
     int idHebra;
     int numHebras;
     long[] vectorNumeros;
+    cuentaIncrementos e;
 
-    public MiHebraBloques(int idHebra, int numHebras, long[] vectorNumeros) {
+    public MiHebraBloques(int idHebra, int numHebras, long[] vectorNumeros, cuentaIncrementos e) {
         this.idHebra = idHebra;
         this.numHebras = numHebras;
         this.vectorNumeros = vectorNumeros;
+        this.e = e;
+
     }
     public void run() {
         int tamano = (vectorNumeros.length+numHebras-1)/numHebras;
@@ -173,8 +190,20 @@ class MiHebraBloques extends Thread {
         for(int contador = inicio; contador<fin; contador++){
             if(Sincronizacion_basica_3.esPrimo(vectorNumeros[contador])){
                 System.out.print(vectorNumeros[contador]+" ");
+                e.aumentarContador();
             }
         }
     }
 }
 
+class cuentaIncrementos {
+    AtomicLong contador = new AtomicLong(0);
+
+    void aumentarContador(){
+        contador.getAndIncrement();
+    }
+
+    long devolverContador(){
+        return contador.get();
+    }
+}

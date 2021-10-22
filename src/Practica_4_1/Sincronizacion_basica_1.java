@@ -1,5 +1,7 @@
 package Practica_4_1;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Sincronizacion_basica_1 {
     public static void main(String args[]) {
         int numHebras;
@@ -41,6 +43,7 @@ public class Sincronizacion_basica_1 {
         for (int contador = 0; contador<vectorNumeros.length; contador++ ){
             if(esPrimo(vectorNumeros[contador])){
                 System.out.printf(vectorNumeros[contador]+" ");
+                //e.aumentarContador();
             }
         }
 
@@ -48,7 +51,9 @@ public class Sincronizacion_basica_1 {
         t2 = System.nanoTime();
         tt = ((double) (t2 - t1)) / 1.0e9;
         System.out.println("\nTiempo secuencial (seg.):\t\t\t" + tt);
+
     }
+
 
     /*static void implementacionCiclica(long[] vectorNumeros, int numHebras) {
         long t1;
@@ -131,4 +136,5 @@ public class Sincronizacion_basica_1 {
         return( primo );
     }
 }
+
 
