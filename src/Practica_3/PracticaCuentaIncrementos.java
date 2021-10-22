@@ -59,6 +59,7 @@ public class PracticaCuentaIncrementos {
 class CuentaIncrementos {
     AtomicLong atomicLong = new AtomicLong(0);
 
+    //Es necesario colocar syncronized en las 2 funciones
     void incrementaNumIncrementos() {
         atomicLong.getAndIncrement();
     }

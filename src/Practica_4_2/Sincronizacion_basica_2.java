@@ -1,5 +1,7 @@
 package Practica_4_2;
 
+import Practica_4_3.Sincronizacion_basica_3;
+
 public class Sincronizacion_basica_2 {
     public static void main(String args[]) {
         int numHebras;
@@ -81,25 +83,6 @@ public class Sincronizacion_basica_2 {
         System.out.println("\nTiempo cíclico (seg.):\t\t\t" + tt);
     }
 
-    static class MiHebraCiclica extends Thread {
-        int idHebra;
-        int numHebras;
-        long[] vectorNumeros;
-
-        public MiHebraCiclica(int idHebra, int numHebras, long[] vectorNumeros) {
-            this.idHebra = idHebra;
-            this.numHebras = numHebras;
-            this.vectorNumeros = vectorNumeros;
-        }
-        public void run() {
-            for (int i = idHebra; i < vectorNumeros.length; i+=numHebras) {
-                if(esPrimo(vectorNumeros[i])){
-                    System.out.print(vectorNumeros[i]+" ");
-                }
-                //System.out.println();
-            }
-        }
-    }
 
 //------------------------------------------------------------------------------------------------------------
 
@@ -148,6 +131,26 @@ public class Sincronizacion_basica_2 {
             }
         }
         return( primo );
+    }
+}
+
+class MiHebraCiclica extends Thread {
+    int idHebra;
+    int numHebras;
+    long[] vectorNumeros;
+
+    public MiHebraCiclica(int idHebra, int numHebras, long[] vectorNumeros) {
+        this.idHebra = idHebra;
+        this.numHebras = numHebras;
+        this.vectorNumeros = vectorNumeros;
+    }
+    public void run() {
+        for (int i = idHebra; i < vectorNumeros.length; i+=numHebras) {
+            if(Sincronizacion_basica_2.esPrimo(vectorNumeros[i])){
+                System.out.print(vectorNumeros[i]+" ");
+            }
+            //System.out.println();
+        }
     }
 }
 
