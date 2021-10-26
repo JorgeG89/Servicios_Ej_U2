@@ -6,7 +6,7 @@ import static java.lang.Math.min;
 
 public class Sincronizacion_basica_3 {
     public static void main(String args[]) {
-        //Ejercicio modificado para que tambien cuente los incrementos al recibir un numero primo
+        //Ejercicio modificado para que tambien cuente los incrementos al recibir un numero primo y NO primo
         int numHebras;
         long vectorNumeros[] = {
                 200000033L, 200000039L, 200000051L, 200000069L,
@@ -47,7 +47,10 @@ public class Sincronizacion_basica_3 {
         for (int contador = 0; contador<vectorNumeros.length; contador++ ){
             if(esPrimo(vectorNumeros[contador])){
                 System.out.printf(vectorNumeros[contador]+" ");
-                e.aumentarContador();
+                e.aumentarContadorPrimo();
+            }
+            else{
+                e.aumentarContadorNoPrimo();
             }
         }
 
@@ -55,7 +58,8 @@ public class Sincronizacion_basica_3 {
         t2 = System.nanoTime();
         tt = ((double) (t2 - t1)) / 1.0e9;
         System.out.println("\nTiempo secuencial (seg.):\t\t\t" + tt);
-        System.out.println("Incrementos: "+e.devolverContador());
+        System.out.println("Incrementos primo: "+e.devolverContadorPrimo());
+        System.out.println("Incrementos NO primo: "+e.devolverContadorNoPrimo());
     }
 
     static void implementacionCiclica(long[] vectorNumeros, int numHebras) {
@@ -88,7 +92,8 @@ public class Sincronizacion_basica_3 {
         tt = ((double) (t2 - t1)) / 1.0e9;
 
         System.out.println("\nTiempo cíclico (seg.):\t\t\t" + tt);
-        System.out.println("Incrementos: "+e.devolverContador());
+        System.out.println("Incrementos: "+e.devolverContadorPrimo());
+        System.out.println("Incrementos NO primo: "+e.devolverContadorNoPrimo());
     }
 
 
@@ -128,7 +133,8 @@ public class Sincronizacion_basica_3 {
         tt = ((double) (t2 - t1)) / 1.0e9;
 
         System.out.println("\nTiempo Bloques (seg.):\t\t\t" + tt);
-        System.out.println("Incrementos: "+e.devolverContador());
+        System.out.println("Incrementos: "+e.devolverContadorPrimo());
+        System.out.println("Incrementos NO primo: "+e.devolverContadorNoPrimo());
     }
 
     static boolean esPrimo( long num ) {
@@ -162,9 +168,11 @@ class MiHebraCiclica extends Thread {
         for (int i = idHebra; i < vectorNumeros.length; i+=numHebras) {
             if(Sincronizacion_basica_3.esPrimo(vectorNumeros[i])){
                 System.out.print(vectorNumeros[i]+" ");
-                e.aumentarContador();
+                e.aumentarContadorPrimo();
             }
-            //System.out.println();
+            else{
+                e.aumentarContadorNoPrimo();
+            }
         }
     }
 }
@@ -190,20 +198,33 @@ class MiHebraBloques extends Thread {
         for(int contador = inicio; contador<fin; contador++){
             if(Sincronizacion_basica_3.esPrimo(vectorNumeros[contador])){
                 System.out.print(vectorNumeros[contador]+" ");
-                e.aumentarContador();
+                e.aumentarContadorPrimo();
+            }
+            else{
+                e.aumentarContadorNoPrimo();
             }
         }
     }
 }
 
 class cuentaIncrementos {
-    AtomicLong contador = new AtomicLong(0);
+    AtomicLong contadorPrimo = new AtomicLong(0);
+    AtomicLong contadorNoPrimo = new AtomicLong(0);
 
-    void aumentarContador(){
-        contador.getAndIncrement();
+    void aumentarContadorPrimo(){
+        contadorPrimo.getAndIncrement();
     }
 
-    long devolverContador(){
-        return contador.get();
+    long devolverContadorPrimo(){
+        return contadorPrimo.get();
+    }
+
+
+    void aumentarContadorNoPrimo(){
+        contadorNoPrimo.getAndIncrement();
+    }
+
+    long devolverContadorNoPrimo(){
+        return contadorNoPrimo.get();
     }
 }
