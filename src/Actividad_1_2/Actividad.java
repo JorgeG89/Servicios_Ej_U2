@@ -6,7 +6,7 @@ public class Actividad {
     public static void main(String args[]) {
         int numHebras;
         double  vector [ ] = new double[]{3.5, 3.9, 4.8, 5.9, 4.8, 2.5, 3.6, 8.3, 9.6, 10.6, 35.8, 23.4};
-        numHebras = 4;
+        numHebras = 2;
 
         implementacionSecuencial(vector);
         implementacionCiclica(vector, numHebras);
