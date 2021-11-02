@@ -1,5 +1,7 @@
 package Practica_5;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Multiplos {
     public static void main(String[] args) {
         int numHebras;
@@ -104,23 +106,28 @@ public class Multiplos {
 }
 
 class devolverValor {
-    int mul2 = 0;
-    int mul3 = 0;
-    int mul5 = 0;
+    //Usar atomic
+    AtomicLong mul2 = new AtomicLong(0);
+    AtomicLong mul3 = new AtomicLong(0);
+    AtomicLong mul5 = new AtomicLong(0);
 
-    synchronized void sumarValor ( int mul2, int mul3, int mul5 ) {
-        this.mul2 += mul2;
-        this.mul3 += mul3;
-        this.mul5 += mul5;
+    void sumarValorMul2 (int num) {
+        mul2.addAndGet(num);
+    }
+    void sumarValorMul3 (int num) {
+        mul3.addAndGet(num);
+    }
+    void sumarValorMul5 (int num) {
+        mul5.addAndGet(num);
     }
 
-    synchronized double dameResultadoMul2() {
+    AtomicLong dameResultadoMul2() {
         return this.mul2;
     }
-    synchronized double dameResultadoMul3() {
+    AtomicLong dameResultadoMul3() {
         return this.mul3;
     }
-    synchronized double dameResultadoMul5() {
+    AtomicLong dameResultadoMul5() {
         return this.mul5;
     }
 }
@@ -150,8 +157,9 @@ class MiHebraCiclicaReduccion extends Thread {
             if(vector[i]%5 == 0)
                 mul5++;
         }
-        e.sumarValor(mul2, mul3, mul5);
-
+        e.sumarValorMul2(mul2);
+        e.sumarValorMul3(mul3);
+        e.sumarValorMul5(mul5);
     }
 }
 
@@ -167,14 +175,15 @@ class MiHebraCiclicaSinReduccion extends Thread {
         this.e = e;
     }
 
+    //Cada vez que se comprueba que es un multiplo, la hebra le suma 1 a la variable de cantidad de la clase devolverValor
     public void run () {
         for ( int i = miId; i < vector.length; i += numHebras ) {
             if(vector[i]%2 == 0)
-                e.sumarValor(1, 0, 0);
+                e.sumarValorMul2(1);
             if(vector[i]%3 == 0)
-                e.sumarValor(0, 1, 0);
+                e.sumarValorMul3(1);
             if(vector[i]%5 == 0)
-                e.sumarValor(0, 0, 1);
+                e.sumarValorMul5(1);
         }
     }
 }
